@@ -8,9 +8,7 @@ import CustomScrollBar from '../../shared/customScrollBar';
 import NewsCard from '../../shared/newsCard';
 import { countryNames } from '../../../constants/countries';
 
-import { isArrayEmpty } from '../../../utility/helpers';
-
-import { topNews } from '../../../constants/dummyNews';
+import { isArrayEmpty, generateUniqueString } from '../../../utility/helpers';
 
 const styles = () => ({
   main: {
@@ -54,22 +52,22 @@ class TopNewsPage extends PureComponent {
   };
 
   componentDidMount() {
-    // const { country, getTopNews } = this.props;
-    // getTopNews(country).then(() => {
-    //   this.setState({ dataFetching: false });
-    //   this.handleNoResults();
-    // });
+    const { country, getTopNews } = this.props;
+    getTopNews(country).then(() => {
+      this.setState({ dataFetching: false });
+      this.handleNoResults();
+    });
   }
 
   componentDidUpdate(prevProps) {
-    // const { country, getTopNews } = this.props;
-    // if (prevProps.country !== country) {
-    //   this.setState({ dataFetching: true });
-    //   getTopNews(country).then(() => {
-    //     this.setState({ dataFetching: false });
-    //     this.handleNoResults();
-    //   });
-    // }
+    const { country, getTopNews } = this.props;
+    if (prevProps.country !== country) {
+      this.setState({ dataFetching: true });
+      getTopNews(country).then(() => {
+        this.setState({ dataFetching: false });
+        this.handleNoResults();
+      });
+    }
   }
 
   componentWillUnmount() {
@@ -95,8 +93,7 @@ class TopNewsPage extends PureComponent {
   };
 
   render() {
-    // const { classes, topNews, country } = this.props;
-    const { classes, country } = this.props;
+    const { classes, topNews, country } = this.props;
     const { dataFetching, noResults } = this.state;
 
     return (
@@ -120,16 +117,16 @@ class TopNewsPage extends PureComponent {
                 <Grid item container spacing={3} xs={12}>
                   {topNews.map(item => (
                     <NewsCard
-                      key={item.url}
+                      key={generateUniqueString()}
                       item={item}
                       onClickMore={() => this.goToArticle(item)}
                     />
                   ))}
-                  {!dataFetching && noResults && isArrayEmpty(topNews) && (
-                    <NoDataText text="No news available" />
-                  )}
                 </Grid>
               </CustomScrollBar>
+            )}
+            {!dataFetching && noResults && isArrayEmpty(topNews) && (
+              <NoDataText text="No news available" />
             )}
           </Grid>
         </div>

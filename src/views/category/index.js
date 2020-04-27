@@ -15,8 +15,6 @@ import { categoriesSelector } from '../../store/selectors/categoriesSelector';
 import CategoryPage from '../../components/pages/categoryPage';
 import PageContainer from '../../components/shared/pageContainer';
 
-import { isArrayEmpty } from '../../utility/helpers';
-
 const mapStateToProps = state => ({
   country: countrySelector(state),
   categories: categoriesSelector(state),

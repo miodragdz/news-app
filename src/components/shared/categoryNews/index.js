@@ -13,7 +13,7 @@ import Typography from '@material-ui/core/Typography';
 import NewsCard from '../newsCard';
 import NoDataText from '../noDataText';
 
-import { isArrayEmpty } from '../../../utility/helpers';
+import { isArrayEmpty, generateUniqueString } from '../../../utility/helpers';
 
 const styles = () => ({
   main: {
@@ -119,7 +119,7 @@ class CategoryNews extends PureComponent {
       category,
       articles,
       toCategoryPage,
-      goArticlePage,
+      goToArticle,
     } = this.props;
     const { opened, first, last } = this.state;
 
@@ -170,9 +170,9 @@ class CategoryNews extends PureComponent {
                     <Grid item container spacing={3} xs={12}>
                       {articles.slice(first, last + 1).map(item => (
                         <NewsCard
-                          key={item.url}
+                          key={generateUniqueString()}
                           item={item}
-                          onClickMore={goArticlePage}
+                          onClickMore={() => goToArticle(item)}
                         />
                       ))}
                     </Grid>
@@ -206,9 +206,9 @@ class CategoryNews extends PureComponent {
                   >
                     {articles.map(item => (
                       <NewsCard
-                        key={item.url}
+                        key={generateUniqueString()}
                         item={item}
-                        onClickMore={goArticlePage}
+                        onClickMore={() => goToArticle(item)}
                       />
                     ))}
                   </Grid>
@@ -228,7 +228,7 @@ CategoryNews.propTypes = {
   articles: PropTypes.arrayOf(PropTypes.object).isRequired,
   category: PropTypes.string.isRequired,
   toCategoryPage: PropTypes.func.isRequired,
-  goArticlePage: PropTypes.func.isRequired,
+  goToArticle: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles)(CategoryNews);

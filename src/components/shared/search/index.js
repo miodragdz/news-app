@@ -7,15 +7,14 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 
 import SearchIcon from '../../../assets/icons/search.svg';
 
-const styles = theme => ({
+const styles = () => ({
   main: {
     maxWidth: 410,
   },
   searchRoot: {
-    backgroundColor: theme.palette.primary.tableHover,
+    backgroundColor: '#F5F7F8',
     borderRadius: '27.5px',
     border: 0,
-    fontFamily: 'ProximaNova-Regular',
     fontSize: 14,
     lineHeight: '17px',
     padding: '11.5px 19px',
@@ -27,6 +26,7 @@ const styles = theme => ({
   focused: {},
   input: {
     padding: 0,
+    color: '#41525B',
   },
 });
 
@@ -52,7 +52,7 @@ class Search extends PureComponent {
     return (
       <div className={classNames(classes.main, className)}>
         <TextField
-          placeholder='Search'
+          placeholder="Search"
           onChange={this.onChange}
           InputProps={{
             disableUnderline: true,
@@ -79,7 +79,6 @@ Search.defaultProps = {
 Search.propTypes = {
   className: PropTypes.string,
   classes: PropTypes.object.isRequired,
-  translations: PropTypes.object.isRequired,
   disabled: PropTypes.bool,
 };
 

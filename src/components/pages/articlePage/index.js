@@ -12,7 +12,7 @@ const styles = () => ({
   },
   pageTitleContainer: {
     paddingTop: '20px',
-    marginBottom: '40px',
+    marginBottom: '20px',
     display: 'flex',
     justifyContent: 'space-between',
     flexDirection: 'row',
@@ -42,6 +42,14 @@ const styles = () => ({
     cursor: 'pointer',
     color: '#41525B',
   },
+  image: {
+    height: 500,
+    marginBottom: 30,
+  },
+  content: {
+    textAlign: 'left',
+    padding: '0 100px 40px',
+  },
 });
 
 class ArticlePage extends PureComponent {
@@ -60,17 +68,16 @@ class ArticlePage extends PureComponent {
           <Grid container spacing={0}>
             <Grid item xs={12} className={classes.pageTitleContainer}>
               <div className={classes.title}>
-                <div className={classes.titlePoint} />
                 <Typography variant="h1" className={classes.textClassName}>
                   {title ? title : 'No title'}
                 </Typography>
               </div>
             </Grid>
-            <Grid item xs={12} className={classes.pageTitleContainer}>
-              <img src={urlToImage} alt="article" />
+            <Grid item xs={12}>
+              <img src={urlToImage} alt="article" className={classes.image} />
             </Grid>
             <Grid item xs={12}>
-              <Typography variant="body1" className={classes.textClassName}>
+              <Typography variant="body1" className={classes.content}>
                 {content ? content : 'No content'}
               </Typography>
             </Grid>

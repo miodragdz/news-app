@@ -68,8 +68,6 @@ const styles = () => ({
   },
 });
 
-const countries = ['US', 'GB'];
-
 class Navigation extends PureComponent {
   render() {
     const { classes, country, setCountry, disabledButtons } = this.props;
@@ -92,7 +90,6 @@ class Navigation extends PureComponent {
             Categories
           </NavLink>
           <NavLink
-            exact
             to="/search"
             className={classes.linkItem}
             activeClassName={classes.active}

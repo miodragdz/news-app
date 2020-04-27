@@ -2,6 +2,9 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
+import CategoriesPage from '../../components/pages/categoriesPage';
+import PageContainer from '../../components/shared/pageContainer';
+
 import { setCountry } from '../../store/modules/country';
 import {
   getCategoryNews,
@@ -11,11 +14,6 @@ import {
 
 import { countrySelector } from '../../store/selectors/countrySelector';
 import { categoriesSelector } from '../../store/selectors/categoriesSelector';
-
-import CategoriesPage from '../../components/pages/categoriesPage';
-import PageContainer from '../../components/shared/pageContainer';
-
-import { isArrayEmpty } from '../../utility/helpers';
 
 const mapStateToProps = state => ({
   country: countrySelector(state),
@@ -41,6 +39,7 @@ class CategoriesPageView extends PureComponent {
 }
 
 CategoriesPageView.propTypes = {
+  setCountry: PropTypes.func.isRequired,
   getCategoryNews: PropTypes.func.isRequired,
   clearCategoryNews: PropTypes.func.isRequired,
   clearAllCategories: PropTypes.func.isRequired,

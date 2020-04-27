@@ -6,14 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import CustomScrollBar from '../../shared/customScrollBar';
 import CategoryNews from '../../shared/categoryNews';
 
-import PageContainer from '../../shared/pageContainer';
-
-import { isArrayEmpty } from '../../../utility/helpers';
-
 import { countryNames } from '../../../constants/countries';
-import { categoryNamesArray } from '../../../constants/categories';
-
-import { categories } from '../../../constants/dummyNews';
 
 const styles = () => ({
   main: {
@@ -51,40 +44,40 @@ const styles = () => ({
 
 class CategoriesPage extends PureComponent {
   state = {
-    dataFetching: false,
+    dataFetching: true,
   };
 
   componentDidMount = () => {
-    // const { country, getCategoryNews } = this.props;
-    // Promise.all([
-    //   getCategoryNews(country, 'business', 5).then(() => {}),
-    //   getCategoryNews(country, 'entertainment', 5).then(() => {}),
-    //   getCategoryNews(country, 'general', 5).then(() => {}),
-    //   getCategoryNews(country, 'health', 5).then(() => {}),
-    //   getCategoryNews(country, 'science', 5).then(() => {}),
-    //   getCategoryNews(country, 'sports', 5).then(() => {}),
-    //   getCategoryNews(country, 'technology', 5).then(() => {}),
-    // ]).then(() => {
-    //   this.setState({ dataFetching: false });
-    // });
+    const { country, getCategoryNews } = this.props;
+    Promise.all([
+      getCategoryNews(country, 'business', 5),
+      getCategoryNews(country, 'entertainment', 5),
+      getCategoryNews(country, 'general', 5),
+      getCategoryNews(country, 'health', 5),
+      getCategoryNews(country, 'science', 5),
+      getCategoryNews(country, 'sports', 5),
+      getCategoryNews(country, 'technology', 5),
+    ]).then(() => {
+      this.setState({ dataFetching: false });
+    });
   };
 
   componentDidUpdate(prevProps) {
-    // const { country, getCategoryNews } = this.props;
-    // if (prevProps.country !== country) {
-    //   this.setState({ dataFetching: true });
-    //   Promise.all([
-    //     getCategoryNews(country, 'business', 5).then(() => {}),
-    //     getCategoryNews(country, 'entertainment', 5).then(() => {}),
-    //     getCategoryNews(country, 'general', 5).then(() => {}),
-    //     getCategoryNews(country, 'health', 5).then(() => {}),
-    //     getCategoryNews(country, 'science', 5).then(() => {}),
-    //     getCategoryNews(country, 'sports', 5).then(() => {}),
-    //     getCategoryNews(country, 'technology', 5).then(() => {}),
-    //   ]).then(() => {
-    //     this.setState({ dataFetching: false });
-    //   });
-    // }
+    const { country, getCategoryNews } = this.props;
+    if (prevProps.country !== country) {
+      this.setState({ dataFetching: true });
+      Promise.all([
+        getCategoryNews(country, 'business', 5),
+        getCategoryNews(country, 'entertainment', 5),
+        getCategoryNews(country, 'general', 5),
+        getCategoryNews(country, 'health', 5),
+        getCategoryNews(country, 'science', 5),
+        getCategoryNews(country, 'sports', 5),
+        getCategoryNews(country, 'technology', 5),
+      ]).then(() => {
+        this.setState({ dataFetching: false });
+      });
+    }
   }
 
   componentWillUnmount() {
@@ -96,11 +89,20 @@ class CategoriesPage extends PureComponent {
     history.push(`/categories/${category}`);
   };
 
-  goArticlePage = () => {};
+  goToArticle = item => {
+    const { history } = this.props;
+    const { title, urlToImage, content } = item;
+    history.push('/categories/all/article', {
+      article: {
+        title,
+        urlToImage,
+        content,
+      },
+    });
+  };
 
   render() {
-    // const { classes, country, categories } = this.props;
-    const { classes, country } = this.props;
+    const { classes, country, categories } = this.props;
     const { dataFetching } = this.state;
 
     return (
@@ -128,7 +130,7 @@ class CategoriesPage extends PureComponent {
                       category={item}
                       articles={categories[item]}
                       toCategoryPage={() => this.toCategoryPage(item)}
-                      goArticlePage={this.goArticlePage}
+                      goToArticle={this.goToArticle}
                     />
                   ))}
                 </Grid>
@@ -146,6 +148,7 @@ CategoriesPage.propTypes = {
   history: PropTypes.object.isRequired,
   country: PropTypes.string.isRequired,
   getCategoryNews: PropTypes.func.isRequired,
+  clearAllCategories: PropTypes.func.isRequired,
   categories: PropTypes.object.isRequired,
 };
 

@@ -3,12 +3,17 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import NoDataText from '../../shared/noDataText';
+import Search from '../../shared/search';
 import CustomScrollBar from '../../shared/customScrollBar';
 import NewsCard from '../../shared/newsCard';
+import NoDataText from '../../shared/noDataText';
 import { countryNames } from '../../../constants/countries';
 
-import { isArrayEmpty, generateUniqueString } from '../../../utility/helpers';
+import {
+  isArrayEmpty,
+  debounce,
+  generateUniqueString,
+} from '../../../utility/helpers';
 
 const styles = () => ({
   main: {
@@ -17,7 +22,7 @@ const styles = () => ({
   },
   pageTitleContainer: {
     paddingTop: '20px',
-    marginBottom: '40px',
+    marginBottom: '20px',
     display: 'flex',
     justifyContent: 'space-between',
     flexDirection: 'row',
@@ -30,7 +35,7 @@ const styles = () => ({
     display: 'flex',
     justifyContent: 'flex-start',
     alignItems: 'center',
-    marginBottom: '20px',
+    marginBottom: '15px',
   },
   titlePoint: {
     border: `1px solid '#41525B'`,
@@ -43,53 +48,57 @@ const styles = () => ({
     cursor: 'pointer',
     flexShrink: 0,
   },
+  search: {
+    width: 411,
+    marginRight: 9,
+  },
+  searchContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    marginBottom: '35px',
+  },
 });
 
-class CategoryPage extends PureComponent {
+class SearchPage extends PureComponent {
   state = {
-    dataFetching: true,
+    dataFetching: false,
     noResults: false,
-    category: '',
+    searchTerm: '',
   };
 
-  componentDidMount() {
-    const { country, getCategoryNews, match } = this.props;
-    const { category } = match.params;
-    getCategoryNews(country, category, 20).then(() => {
-      this.setState({ dataFetching: false, category });
-      this.handleNoResults();
-    });
-  }
+  componentDidMount() {}
 
   componentDidUpdate(prevProps) {
-    const { country, getCategoryNews } = this.props;
-    const { category } = this.state;
-    if (prevProps.country !== country) {
+    const { country, getFilteredNews } = this.props;
+    const { searchTerm } = this.state;
+    if (prevProps.country !== country && searchTerm !== '') {
       this.setState({ dataFetching: true });
-      getCategoryNews(country, category, 20).then(() => {
+      getFilteredNews(country, searchTerm).then(() => {
         this.setState({ dataFetching: false });
         this.handleNoResults();
       });
     }
   }
 
-  componentWillUnmount() {
-    const { clearCategoryNews } = this.props;
-    const { category } = this.state;
-    clearCategoryNews(category);
-  }
+  onSearch = text => {
+    console.log('SearchPage -> componentDidMount -> text', text);
+    const { country, getFilteredNews } = this.props;
+    this.setState({ dataFetching: true, searchTerm: text });
+    getFilteredNews(country, text).then(() => {
+      this.setState({ dataFetching: false });
+      this.handleNoResults();
+    });
+  };
 
   handleNoResults = () => {
-    const { categories } = this.props;
-    const { category } = this.state;
-    this.setState({ noResults: isArrayEmpty(categories[category]) });
+    const { filteredNews } = this.props;
+    this.setState({ noResults: isArrayEmpty(filteredNews) });
   };
 
   goToArticle = item => {
     const { history } = this.props;
-    const { category } = this.state;
     const { title, urlToImage, content } = item;
-    history.push(`/categories/${category}/article`, {
+    history.push('/search/article', {
       article: {
         title,
         urlToImage,
@@ -99,8 +108,8 @@ class CategoryPage extends PureComponent {
   };
 
   render() {
-    const { classes, country, categories } = this.props;
-    const { dataFetching, noResults, category } = this.state;
+    const { classes, filteredNews, country } = this.props;
+    const { dataFetching, noResults } = this.state;
 
     return (
       <Fragment>
@@ -110,18 +119,26 @@ class CategoryPage extends PureComponent {
               <div className={classes.title}>
                 <div className={classes.titlePoint} />
                 <Typography variant="h1" className={classes.textClassName}>
-                  {`Top ${category} news from ${countryNames[country]}:`}
+                  {`Search top news from ${countryNames[country]} by term:`}
                 </Typography>
               </div>
             </Grid>
-            {!dataFetching && !isArrayEmpty(categories[category]) && (
+            <Grid item xs={12} className={classes.searchContainer}>
+              <div className={classes.search}>
+                <Search
+                  className={classes.search}
+                  onChange={debounce(this.onSearch, 300)}
+                />
+              </div>
+            </Grid>
+            {!dataFetching && !isArrayEmpty(filteredNews) && (
               <CustomScrollBar
                 verticalScroll
                 removeScrollX
                 scrollBarHeight={670}
               >
                 <Grid item container spacing={3} xs={12}>
-                  {categories[category].map(item => (
+                  {filteredNews.map(item => (
                     <NewsCard
                       key={generateUniqueString()}
                       item={item}
@@ -131,11 +148,9 @@ class CategoryPage extends PureComponent {
                 </Grid>
               </CustomScrollBar>
             )}
-            {!dataFetching &&
-              noResults &&
-              isArrayEmpty(categories[category]) && (
-                <NoDataText text="No news available" />
-              )}
+            {!dataFetching && noResults && isArrayEmpty(filteredNews) && (
+              <NoDataText text="No news available for that search" />
+            )}
           </Grid>
         </div>
       </Fragment>
@@ -143,12 +158,13 @@ class CategoryPage extends PureComponent {
   }
 }
 
-CategoryPage.propTypes = {
+SearchPage.propTypes = {
   classes: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired,
   country: PropTypes.string.isRequired,
-  getCategoryNews: PropTypes.func.isRequired,
-  categories: PropTypes.object.isRequired,
+  getFilteredNews: PropTypes.func.isRequired,
+  clearFilteredNews: PropTypes.func.isRequired,
+  filteredNews: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
-export default withStyles(styles)(CategoryPage);
+export default withStyles(styles)(SearchPage);

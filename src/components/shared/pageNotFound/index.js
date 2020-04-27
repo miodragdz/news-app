@@ -5,7 +5,6 @@ import Avatar from '@material-ui/core/Avatar';
 import BrokenImage from '@material-ui/icons/BrokenImage';
 import { withStyles } from '@material-ui/core/styles';
 import { withRouter } from 'react-router';
-import { strings } from '../../../constants/strings';
 
 const styles = () => ({
   main: {
@@ -33,21 +32,24 @@ const styles = () => ({
   avatar: {
     width: 160,
     height: 160,
-    backgroundColor: '#1E87F0',
+    backgroundColor: 'coral',
   },
   link: {
-    color: '41525B',
+    color: '#41525B',
     fontSize: '14px',
     lineHeight: '17px',
     cursor: 'pointer',
     backgroundColor: 'transparent',
     border: 0,
     '&:hover': {
-      color: '#1E87F0',
+      color: 'coral',
     },
     '&:focus': {
       outline: 'none',
     },
+  },
+  text: {
+    color: '#41525B',
   },
 });
 
@@ -61,15 +63,15 @@ class PageNotFound extends PureComponent {
             <BrokenImage className={classes.iconSize} />
           </Avatar>
         </div>
-        <Typography variant="h1" gutterBottom>
-          {strings.PageNotFound.title}
+        <Typography variant="h1" gutterBottom className={classes.text}>
+          Page Not Found
         </Typography>
         <button
           type="button"
           className={classes.link}
           onClick={() => history.push('/')}
         >
-          {strings.PageNotFound.goHome}
+          Go home
         </button>
       </div>
     );
