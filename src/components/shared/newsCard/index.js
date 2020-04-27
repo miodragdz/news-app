@@ -22,6 +22,8 @@ const styles = () => ({
     height: 50,
     marginBottom: 15,
     overflow: 'hidden',
+    paddingLeft: 10,
+    paddingRight: 10,
   },
   cardImage: {
     height: 140,
@@ -30,11 +32,17 @@ const styles = () => ({
     height: 40,
     overflow: 'hidden',
   },
+  cardAction: {
+    justifyContent: 'flex-end',
+  },
+  actionButton: {
+    color: '#41525B',
+  },
 });
 
 class NewsCard extends PureComponent {
   render() {
-    const { classes, item } = this.props;
+    const { classes, item, onClickMore } = this.props;
 
     return (
       <Grid item xs={4}>
@@ -66,8 +74,13 @@ class NewsCard extends PureComponent {
               </Typography>
             </CardContent>
           </CardActionArea>
-          <CardActions>
-            <Button size="small" color="primary">
+          <CardActions className={classes.cardAction}>
+            <Button
+              size="small"
+              color="primary"
+              onClick={onClickMore}
+              className={classes.actionButton}
+            >
               More >
             </Button>
           </CardActions>
@@ -77,10 +90,14 @@ class NewsCard extends PureComponent {
   }
 }
 
+NewsCard.defaultProps = {
+  onClickMore: () => {},
+};
+
 NewsCard.propTypes = {
   classes: PropTypes.object.isRequired,
   item: PropTypes.object.isRequired,
-  onClickMore: PropTypes.func.isRequired,
+  onClickMore: PropTypes.func,
 };
 
 export default withStyles(styles)(NewsCard);

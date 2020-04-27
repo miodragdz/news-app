@@ -87,7 +87,6 @@ export const getCategoryNews = (dispatch, country, category, pageSize) => {
   return axios
     .get(apiCategoryNews(country, category, pageSize))
     .then(({ data }) => {
-      console.log('getCategoryNews -> data', data);
       dispatch(setCategoryNews({ category, data: data.articles }));
       // switch(category) {
       //   case 'business':

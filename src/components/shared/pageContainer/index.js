@@ -26,24 +26,38 @@ const styles = () => ({
 
 class PageContainer extends PureComponent {
   render() {
-    const { children, country, classes, setCountry } = this.props;
+    const {
+      children,
+      country,
+      classes,
+      setCountry,
+      disabledButtons,
+    } = this.props;
 
     return (
       <div id="pageContainer" className={classes.root}>
-        <Navigation country={country} setCountry={setCountry} />
+        <Navigation
+          country={country}
+          setCountry={setCountry}
+          disabledButtons={disabledButtons}
+        />
         <div className={classes.content}>{children}</div>
       </div>
     );
   }
 }
 
-PageContainer.defaultProps = {};
+PageContainer.defaultProps = {
+  disabledButtons: false,
+  setCountry: () => {},
+};
 
 PageContainer.propTypes = {
   classes: PropTypes.object.isRequired,
   children: PropTypes.node.isRequired,
   country: PropTypes.string.isRequired,
-  setCountry: PropTypes.func.isRequired,
+  setCountry: PropTypes.func,
+  disabledButtons: PropTypes.bool,
 };
 
 export default withStyles(styles)(PageContainer);

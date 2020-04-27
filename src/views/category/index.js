@@ -12,7 +12,7 @@ import {
 import { countrySelector } from '../../store/selectors/countrySelector';
 import { categoriesSelector } from '../../store/selectors/categoriesSelector';
 
-import CategoriesPage from '../../components/pages/categoriesPage';
+import CategoryPage from '../../components/pages/categoryPage';
 import PageContainer from '../../components/shared/pageContainer';
 
 import { isArrayEmpty } from '../../utility/helpers';
@@ -30,20 +30,20 @@ const mapDispatchToProps = dispatch => ({
   clearAllCategories: () => dispatch(clearAllCategories()),
 });
 
-class CategoriesPageView extends PureComponent {
+class CategoryPageView extends PureComponent {
   render() {
     return (
       <PageContainer {...this.props}>
-        <CategoriesPage {...this.props} />
+        <CategoryPage {...this.props} />
       </PageContainer>
     );
   }
 }
 
-CategoriesPageView.propTypes = {
+CategoryPageView.propTypes = {
   getCategoryNews: PropTypes.func.isRequired,
   clearCategoryNews: PropTypes.func.isRequired,
   clearAllCategories: PropTypes.func.isRequired,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(CategoriesPageView);
+export default connect(mapStateToProps, mapDispatchToProps)(CategoryPageView);

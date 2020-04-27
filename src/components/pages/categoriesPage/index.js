@@ -19,8 +19,6 @@ const styles = () => ({
   main: {
     maxWidth: '1200px',
     margin: '0 auto',
-    // display: 'flex',
-    // justifyContent: 'center',
   },
   pageTitleContainer: {
     paddingTop: '20px',
@@ -37,7 +35,6 @@ const styles = () => ({
     display: 'flex',
     justifyContent: 'flex-start',
     alignItems: 'center',
-    // marginBottom: '20px',
   },
   titlePoint: {
     border: `1px solid '#41525B'`,
@@ -95,7 +92,6 @@ class CategoriesPage extends PureComponent {
   }
 
   toCategoryPage = category => {
-    console.log('CategoriesPage -> category', category);
     const { history } = this.props;
     history.push(`/categories/${category}`);
   };

@@ -10,8 +10,6 @@ import { countryNames } from '../../../constants/countries';
 
 import { isArrayEmpty } from '../../../utility/helpers';
 
-import { topNews } from '../../../constants/dummyNews';
-
 const styles = () => ({
   main: {
     maxWidth: '1200px',
@@ -47,57 +45,51 @@ const styles = () => ({
   },
 });
 
-class TopNewsPage extends PureComponent {
+class CategoryPage extends PureComponent {
   state = {
-    dataFetching: false,
+    dataFetching: true,
     noResults: false,
+    category: '',
   };
 
   componentDidMount() {
-    // const { country, getTopNews } = this.props;
-    // getTopNews(country).then(() => {
-    //   this.setState({ dataFetching: false });
-    //   this.handleNoResults();
-    // });
+    const { country, getCategoryNews, match } = this.props;
+    const { category } = match.params;
+    getCategoryNews(country, category, 20).then(() => {
+      this.setState({ dataFetching: false, category });
+      this.handleNoResults();
+    });
   }
 
   componentDidUpdate(prevProps) {
-    // const { country, getTopNews } = this.props;
-    // if (prevProps.country !== country) {
-    //   this.setState({ dataFetching: true });
-    //   getTopNews(country).then(() => {
-    //     this.setState({ dataFetching: false });
-    //     this.handleNoResults();
-    //   });
-    // }
+    const { country, getCategoryNews } = this.props;
+    const { category } = this.state;
+    if (prevProps.country !== country) {
+      this.setState({ dataFetching: true });
+      getCategoryNews(country, category, 20).then(() => {
+        this.setState({ dataFetching: false });
+        this.handleNoResults();
+      });
+    }
   }
 
   componentWillUnmount() {
-    const { clearTopNews } = this.props;
-    clearTopNews();
+    const { category } = this.state;
+    const { clearCategoryNews } = this.props;
+    clearCategoryNews(category);
   }
 
   handleNoResults = () => {
-    const { topNews } = this.props;
-    this.setState({ noResults: isArrayEmpty(topNews) });
+    const { categories } = this.props;
+    const { category } = this.state;
+    this.setState({ noResults: isArrayEmpty(categories[category]) });
   };
 
-  goToArticle = item => {
-    const { history } = this.props;
-    const { title, urlToImage, content } = item;
-    history.push('/topNews/article', {
-      article: {
-        title,
-        urlToImage,
-        content,
-      },
-    });
-  };
+  goToArticle = () => {};
 
   render() {
-    // const { classes, topNews, country } = this.props;
-    const { classes, country } = this.props;
-    const { dataFetching, noResults } = this.state;
+    const { classes, country, categories } = this.props;
+    const { dataFetching, noResults, category } = this.state;
 
     return (
       <Fragment>
@@ -107,27 +99,29 @@ class TopNewsPage extends PureComponent {
               <div className={classes.title}>
                 <div className={classes.titlePoint} />
                 <Typography variant="h1" className={classes.textClassName}>
-                  {`Top news from ${countryNames[country]}:`}
+                  {`Top ${category} news from ${countryNames[country]}:`}
                 </Typography>
               </div>
             </Grid>
-            {!dataFetching && !isArrayEmpty(topNews) && (
+            {!dataFetching && !isArrayEmpty(categories[category]) && (
               <CustomScrollBar
                 verticalScroll
                 removeScrollX
                 scrollBarHeight={670}
               >
                 <Grid item container spacing={3} xs={12}>
-                  {topNews.map(item => (
+                  {categories[category].map(item => (
                     <NewsCard
                       key={item.url}
                       item={item}
-                      onClickMore={() => this.goToArticle(item)}
+                      onClickMore={this.goToArticle}
                     />
                   ))}
-                  {!dataFetching && noResults && isArrayEmpty(topNews) && (
-                    <NoDataText text="No news available" />
-                  )}
+                  {!dataFetching &&
+                    noResults &&
+                    isArrayEmpty(categories[category]) && (
+                      <NoDataText text="No news available" />
+                    )}
                 </Grid>
               </CustomScrollBar>
             )}
@@ -138,10 +132,12 @@ class TopNewsPage extends PureComponent {
   }
 }
 
-TopNewsPage.propTypes = {
+CategoryPage.propTypes = {
   classes: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired,
-  topNews: PropTypes.arrayOf(PropTypes.object).isRequired,
+  country: PropTypes.string.isRequired,
+  getCategoryNews: PropTypes.func.isRequired,
+  categories: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(TopNewsPage);
+export default withStyles(styles)(CategoryPage);

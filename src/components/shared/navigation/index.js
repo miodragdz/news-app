@@ -62,20 +62,23 @@ const styles = () => ({
     color: 'white',
     backgroundColor: '#41525B',
   },
+  disabledButton: {
+    backgroundColor: 'coral',
+    cursor: 'default',
+  },
 });
 
 const countries = ['US', 'GB'];
 
 class Navigation extends PureComponent {
   render() {
-    const { classes, country, setCountry } = this.props;
+    const { classes, country, setCountry, disabledButtons } = this.props;
 
     return (
       <div className={classes.main}>
         <div className={classes.links}>
           <NavLink
-            exact
-            to="/"
+            to="/topNews"
             className={classes.linkItem}
             activeClassName={classes.active}
           >
@@ -104,8 +107,13 @@ class Navigation extends PureComponent {
                 key={item}
                 className={classNames(classes.buttonItem, {
                   [classes.activeButtonItem]: country === item,
+                  [classes.disabledButton]: disabledButtons,
                 })}
-                onClick={country === item ? () => {} : () => setCountry(item)}
+                onClick={
+                  country === item || disabledButtons
+                    ? () => {}
+                    : () => setCountry(item)
+                }
               >
                 {item}
               </div>
@@ -117,9 +125,14 @@ class Navigation extends PureComponent {
   }
 }
 
+Navigation.defaultProps = {
+  disabledButtons: false,
+};
+
 Navigation.propTypes = {
   classes: PropTypes.object.isRequired,
   country: PropTypes.string.isRequired,
+  disabledButtons: PropTypes.bool,
 };
 
 export default withRouter(withStyles(styles)(Navigation));

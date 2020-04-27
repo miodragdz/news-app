@@ -10,8 +10,6 @@ export const history = createBrowserHistory();
 export const store = configureStore(initialState, history);
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App history={history} store={store} />
-  </React.StrictMode>,
+  <App history={history} store={store} />,
   document.getElementById('root')
 );
