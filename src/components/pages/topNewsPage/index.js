@@ -138,7 +138,10 @@ class TopNewsPage extends PureComponent {
 TopNewsPage.propTypes = {
   classes: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired,
+  country: PropTypes.string.isRequired,
   topNews: PropTypes.arrayOf(PropTypes.object).isRequired,
+  getTopNews: PropTypes.func.isRequired,
+  clearTopNews: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles)(TopNewsPage);

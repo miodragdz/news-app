@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import SearchPage from '../../components/pages/searchPage';
@@ -31,5 +32,13 @@ class SearchPageView extends PureComponent {
     );
   }
 }
+
+SearchPageView.propTypes = {
+  country: PropTypes.string.isRequired,
+  filteredNews: PropTypes.arrayOf(PropTypes.object).isRequired,
+  setCountry: PropTypes.func.isRequired,
+  getFilteredNews: PropTypes.func.isRequired,
+  clearFilteredNews: PropTypes.func.isRequired,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(SearchPageView);

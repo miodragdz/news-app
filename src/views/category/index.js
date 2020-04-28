@@ -39,6 +39,8 @@ class CategoryPageView extends PureComponent {
 }
 
 CategoryPageView.propTypes = {
+  country: PropTypes.string.isRequired,
+  categories: PropTypes.object.isRequired,
   getCategoryNews: PropTypes.func.isRequired,
   clearCategoryNews: PropTypes.func.isRequired,
   clearAllCategories: PropTypes.func.isRequired,

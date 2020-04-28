@@ -81,7 +81,8 @@ class CategoriesPage extends PureComponent {
   }
 
   componentWillUnmount() {
-    this.props.clearAllCategories();
+    const { clearAllCategories } = this.props;
+    clearAllCategories();
   }
 
   toCategoryPage = category => {
@@ -147,9 +148,9 @@ CategoriesPage.propTypes = {
   classes: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired,
   country: PropTypes.string.isRequired,
+  categories: PropTypes.object.isRequired,
   getCategoryNews: PropTypes.func.isRequired,
   clearAllCategories: PropTypes.func.isRequired,
-  categories: PropTypes.object.isRequired,
 };
 
 export default withStyles(styles)(CategoriesPage);

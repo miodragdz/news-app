@@ -9,11 +9,7 @@ import NewsCard from '../../shared/newsCard';
 import NoDataText from '../../shared/noDataText';
 import { countryNames } from '../../../constants/countries';
 
-import {
-  isArrayEmpty,
-  debounce,
-  generateUniqueString,
-} from '../../../utility/helpers';
+import { isArrayEmpty, generateUniqueString } from '../../../utility/helpers';
 
 const styles = () => ({
   main: {
@@ -66,8 +62,6 @@ class SearchPage extends PureComponent {
     searchTerm: '',
   };
 
-  componentDidMount() {}
-
   componentDidUpdate(prevProps) {
     const { country, getFilteredNews } = this.props;
     const { searchTerm } = this.state;
@@ -80,8 +74,12 @@ class SearchPage extends PureComponent {
     }
   }
 
+  componentWillUnmount() {
+    const { clearFilteredNews } = this.props;
+    clearFilteredNews();
+  }
+
   onSearch = text => {
-    console.log('SearchPage -> componentDidMount -> text', text);
     const { country, getFilteredNews } = this.props;
     this.setState({ dataFetching: true, searchTerm: text });
     getFilteredNews(country, text).then(() => {
@@ -125,10 +123,7 @@ class SearchPage extends PureComponent {
             </Grid>
             <Grid item xs={12} className={classes.searchContainer}>
               <div className={classes.search}>
-                <Search
-                  className={classes.search}
-                  onChange={debounce(this.onSearch, 300)}
-                />
+                <Search className={classes.search} onChange={this.onSearch} />
               </div>
             </Grid>
             {!dataFetching && !isArrayEmpty(filteredNews) && (

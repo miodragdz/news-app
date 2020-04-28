@@ -1,7 +1,6 @@
 import { createAction, handleActions } from 'redux-actions';
 import axios from 'axios';
 import { apiFilteredNews } from '../../constants/apiRoutes';
-
 import { isArray } from '../../utility/helpers';
 
 // ------------------------------------

@@ -124,12 +124,14 @@ class Navigation extends PureComponent {
 
 Navigation.defaultProps = {
   disabledButtons: false,
+  setCountry: () => {},
 };
 
 Navigation.propTypes = {
   classes: PropTypes.object.isRequired,
   country: PropTypes.string.isRequired,
   disabledButtons: PropTypes.bool,
+  setCountry: PropTypes.func,
 };
 
 export default withRouter(withStyles(styles)(Navigation));

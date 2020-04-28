@@ -33,6 +33,8 @@ class TopNewsPageView extends PureComponent {
 }
 
 TopNewsPageView.propTypes = {
+  country: PropTypes.string.isRequired,
+  topNews: PropTypes.arrayOf(PropTypes.object).isRequired,
   setCountry: PropTypes.func.isRequired,
   getTopNews: PropTypes.func.isRequired,
   clearTopNews: PropTypes.func.isRequired,

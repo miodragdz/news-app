@@ -147,8 +147,9 @@ CategoryPage.propTypes = {
   classes: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired,
   country: PropTypes.string.isRequired,
-  getCategoryNews: PropTypes.func.isRequired,
   categories: PropTypes.object.isRequired,
+  getCategoryNews: PropTypes.func.isRequired,
+  clearCategoryNews: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles)(CategoryPage);
